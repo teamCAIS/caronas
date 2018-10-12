@@ -15,7 +15,7 @@ class Controller extends BaseController
 	public function cadastro(Request $request){
 		\DB::table('pessoa')->insert(
 			array('nome' => $request['nome'],'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-			'cpf' => $request['cpf'],'email' => $request['email'], 'senha' => HASH::make($request['senha']),'tipo' => $request['tipo'])
+			'cpf' => $request['cpf'],'email' => $request['email'], 'password' => HASH::make($request['password']),'tipo' => $request['tipo'])
 		);
 	}
 }

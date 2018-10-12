@@ -16,7 +16,7 @@
 			<input type="text" name="nascimento" placeholder="Nascimento">
 			<input type="text" name="cpf" placeholder="CPF">
 			<input type="text" name="email" placeholder="Email">
-			<input type="text" name="senha" placeholder="Senha">
+			<input type="text" name="password" placeholder="Senha">
 			<input type="text" name="tipo" placeholder="Tipo">
 			<button type="submit">Enviar</button>
 		</form>
