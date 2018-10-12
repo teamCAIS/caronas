@@ -19,7 +19,7 @@ class CreatePessoaTable extends Migration
 			$table->date('nascimento');
 			$table->string('cpf',11);
 			$table->string('email',100);
-			$table->string('senha',8);
+			$table->string('password',200);
 			$table->string('matricula',6);
 			$table->integer('tipo');
             $table->timestamps();
