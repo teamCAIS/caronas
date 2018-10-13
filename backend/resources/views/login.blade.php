@@ -4,13 +4,13 @@
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="estilos.css">
 	<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 
 	<form id="form">
-	{{ csrf_field() }}
+
 		<label>
 			Email
 			<input id="email" name="email" type="email"> <br>
@@ -31,10 +31,9 @@
 			event.preventDefault();
 			
 			payload = {
-				email: document.querySelector('#email').value,
-				password: document.querySelector('#senha').value
+				email: String(document.querySelector('#email').value),
+				password: String(document.querySelector('#senha').value)
 			}
-			console.log(payload);
 			fetch('', {
 				method: 'post',
 				body: JSON.stringify(payload),

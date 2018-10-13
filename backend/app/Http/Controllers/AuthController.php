@@ -15,7 +15,9 @@ class AuthController extends Controller
 	public function login(Request $request)
 	{
 		auth()->shouldUse('pessoas');
-		$credentials = $request->input->only('email', 'password');
+		$email = $request->input('email');
+		$password = $request->input('password');
+		$credentials = ['email'=>$email, 'password'=>$password];
 		$rules = [
 			'email' => 'required|email',
 			'password' => 'required',
