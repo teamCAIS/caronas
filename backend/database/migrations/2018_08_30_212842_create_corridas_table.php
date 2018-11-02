@@ -14,12 +14,15 @@ class CreateCorridasTable extends Migration
     public function up()
     {
         Schema::create('corridas', function (Blueprint $table) {
-            $table->increments('id_corrida');
+            $table->increments('id');
 			$table->integer('id_motorista')->unsigned();
-			$table->foreign('id_motorista')->references('id_motorista')->on('motorista');
+			$table->foreign('id_motorista')->references('id')->on('motorista');
 			$table->timestamp('horaCorrida');
 			$table->string('saida',20);
+			$table->string('pontoEncontro',100);
 			$table->integer('vagas');
+			$table->date('dataCorrida');
+			$table->integer('status')->default(0);
             $table->timestamps();
         });
     }

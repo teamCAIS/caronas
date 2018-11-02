@@ -13,6 +13,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('jwt.auth')->get('/index', function(Request $request) {
-    return auth()->user();
+Route::get('/register',function(){
+	return view('register');
+});
+Route::get('/',function(){
+	return view('login');
+});
+Route::post('/cadastro', 'Controller@cadastro');
+Route::post('/', 'AuthController@login');
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('/index', 'Controller@pegaInfo');
 });

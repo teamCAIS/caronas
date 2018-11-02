@@ -10,14 +10,5 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/register',function(){
-	return view('register');
-});
-Route::post('/cadastro', 'Controller@cadastro');
-Route::get('/',function(){
-	return view('login');
-});
-Route::post('/', 'AuthController@login');
-Route::middleware('jwt.auth')->get('/index', 'Controller@pegaInfo');
 
 //eyJpdiI6Ikc2UXl1aGNEQmh3WVJhV3Bvd2FNWFE9PSIsInZhbHVlIjoiVEJudWhNcGx0MXdcL29zN0g1QVFsK3g2MjE4UlJhR0dTT3k1XC9FOFl2NlpUTXlVUFwvYTZvb1RvVVR1ODZQNVBoZSIsIm1hYyI6IjcyZjNlYjk1MzM0OTMyYjIxOTY0NDc1MTk4Y2YwNTFiNmJmYTkyNDEyNDJjYWI3NTA4NDk0MjE5NjE4YjRhMGEifQ==

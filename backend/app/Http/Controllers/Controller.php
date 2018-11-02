@@ -21,6 +21,22 @@ class Controller extends BaseController
 					'tipo' => $request['tipo']
 					];
 		$linha = \DB::table('pessoa')->where('codigo_validacao', $usuario['codigo_validacao'])->first();
+		if(intval($usuario['tipo']) == 2){
+			$usuario += ['modelo' => $request['modelo'],
+						 'corCarro' => $request['corCarro'],
+						 'placa' =>  $request['placa'],
+						 'nota' => 0
+						];
+			\DB::table('motorista')->insert(
+				array(
+					'id_usuario' => $linha->id,
+					'modelo' => $usuario['modelo'],
+					'placa' => $usuario['placa'],
+					'corCarro' => $usuario['corCarro'],
+					'nota' => $usuario['nota']
+				)		
+			);
+		}
 		\DB::table('pessoa')->where('id',$linha->id)->update(
 			array(
 				'nome' => $usuario['nome'],

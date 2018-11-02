@@ -15,10 +15,12 @@ class CreateMotoristaTable extends Migration
     {
         Schema::create('motorista', function (Blueprint $table) {
 			$table->increments('id');
-            $table->integer('id_motorista')->unsigned();
-			$table->foreign('id_motorista')->references('id')->on('pessoa');
+            $table->integer('id_usuario')->unsigned();
+			$table->foreign('id_usuario')->references('id')->on('pessoa');
+			$table->string('modelo',7);
 			$table->string('placa',7);
 			$table->string('corCarro',10);
+			$table->float('nota', 1, 1);
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@ return [
 
     'defaults' => [
         'guard' => 'api',
-        'senha' => 'pessoas',
+        'passwords' => 'users',
     ],
    'guards' => [
         'api' => [
