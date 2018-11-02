@@ -13,9 +13,25 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 	
 	public function cadastro(Request $request){
-		\DB::table('pessoa')->insert(
-			array('nome' => $request['nome'],'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-			'cpf' => $request['cpf'],'email' => $request['email'], 'password' => HASH::make($request['password']),'tipo' => $request['tipo'])
+		$usuario = ['nome' => $request['nome'],
+					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
+					'email' => $request['email'],
+					'password' => HASH::make($request['password']), 
+					'codigo_validacao' => $request['codigo_validacao'],
+					'tipo' => $request['tipo']
+					];
+		$linha = \DB::table('pessoa')->where('codigo_validacao', $usuario['codigo_validacao'])->first();
+		\DB::table('pessoa')->where('id',$linha->id)->update(
+			array(
+				'nome' => $usuario['nome'],
+				'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
+				'email' => $request['email'], 
+				'password' => HASH::make($request['password']),
+				'codigo_validacao' => '',
+				'tipo' => $request['tipo'])
 		);
+	}
+	public function pegaInfo(){
+		return auth() -> user();
 	}
 }

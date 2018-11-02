@@ -15,7 +15,7 @@ class Pessoa extends Model implements JWTSubject,Authenticatable
 	 */
 	protected $table = 'pessoa';
 	protected $fillable = [
-		'nome', 'nascimento','cpf','email', 'password','tipo'
+		'nome', 'nascimento','email', 'password','codigo_validacao','tipo'
 	];
 	/**
 	 * The attributes that should be hidden for arrays.

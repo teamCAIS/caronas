@@ -41,10 +41,20 @@
 					"Content-Type": "application/json"
 				  }
 			})
-			.then(response => {
-				console.log(response);
+			.then(response => response.json())
+			.then(result =>{
+				fetch('../public/index', {
+					method: 'get',
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "bearer "+result['data']['token']
+					  }
+				})
+				.then(response => response.json())
+				.then(result => {
+					console.log(result);
+				});
 			});
-			
 		})
 		
 	</script>

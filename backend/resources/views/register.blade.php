@@ -14,9 +14,9 @@
         <form method='POST' action='../public/cadastro'>
 			<input type="text" name="nome" placeholder="Nome">
 			<input type="text" name="nascimento" placeholder="Nascimento">
-			<input type="text" name="cpf" placeholder="CPF">
 			<input type="text" name="email" placeholder="Email">
 			<input type="text" name="password" placeholder="Senha">
+			<input type="text" name="codigo_validacao" placeholder="Código de Validação">
 			<input type="text" name="tipo" placeholder="Tipo">
 			<button type="submit">Enviar</button>
 		</form>

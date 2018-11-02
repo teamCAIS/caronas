@@ -19,8 +19,7 @@ class CreateCorridasTable extends Migration
 			$table->foreign('id_motorista')->references('id_motorista')->on('motorista');
 			$table->timestamp('horaCorrida');
 			$table->string('saida',20);
-			$table->string('bairroDestino',20);
-			$table->integer('qtdeLugares');
+			$table->integer('vagas');
             $table->timestamps();
         });
     }
