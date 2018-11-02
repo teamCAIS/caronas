@@ -43,7 +43,7 @@
 			})
 			.then(response => response.json())
 			.then(result =>{
-				fetch('../public/api/index', {
+				fetch('../public/api/historicoPassageiro', {
 					method: 'get',
 					headers: {
 						"Content-Type": "application/json",

@@ -19,8 +19,12 @@ Route::get('/register',function(){
 Route::get('/',function(){
 	return view('login');
 });
+
 Route::post('/cadastro', 'Controller@cadastro');
 Route::post('/', 'AuthController@login');
+
 Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::get('/index', 'Controller@pegaInfo');
+    Route::get('/indexPassageiro', 'PassageiroController@getInfo');
+	Route::get('/feedPassageiro', 'PassageiroController@getCorridas');
+	Route::get('/historicoPassageiro', 'PassageiroController@getHistorico');
 });

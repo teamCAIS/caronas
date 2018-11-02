@@ -17,11 +17,10 @@ class CreateCorridasTable extends Migration
             $table->increments('id');
 			$table->integer('id_motorista')->unsigned();
 			$table->foreign('id_motorista')->references('id')->on('motorista');
-			$table->timestamp('horaCorrida');
 			$table->string('saida',20);
 			$table->string('pontoEncontro',100);
 			$table->integer('vagas');
-			$table->date('dataCorrida');
+			$table->timestamp('data_hora')->default(DB::raw('CURRENT_TIMESTAMP'));
 			$table->integer('status')->default(0);
             $table->timestamps();
         });
