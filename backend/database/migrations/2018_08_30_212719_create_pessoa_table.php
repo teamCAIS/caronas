@@ -17,6 +17,7 @@ class CreatePessoaTable extends Migration
             $table->increments('id');
 			$table->string('nome',100);
 			$table->date('nascimento');
+			$table->integer('genero');
 			$table->string('email',100);
 			$table->string('password',200);
 			$table->string('codigo_validacao',8)->default('000000');
@@ -32,6 +33,7 @@ class CreatePessoaTable extends Migration
 					array(
 						'nome' => '',
 						'nascimento' => date('Y-m-d'),
+						'genero', rand(0,1),
 						'email' => '',
 						'password' => '',
 						'codigo_validacao'=>$resultado_final,

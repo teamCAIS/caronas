@@ -24,10 +24,10 @@ Route::post('/cadastro', 'Controller@cadastro');
 Route::post('/', 'AuthController@login');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
-    Route::get('/indexPassageiro', 'PassageiroController@getInfo');
-	Route::get('/feedPassageiro', 'PassageiroController@getCorridas');
-	Route::get('/historicoPassageiro', 'PassageiroController@getHistorico');
-	Route::get('/setCorridaPassageiro', 'PassageiroController@setCorrida');
+    Route::get('/indexPassageiro', 'PassageiroController@perfil');
+	Route::get('/feedPassageiro', 'PassageiroController@feed');
+	Route::get('/historicoPassageiro', 'PassageiroController@historico');
+	Route::get('/entrarCorridaPassageiro', 'PassageiroController@entrarCorrida');
 	Route::get('/sairCorridaPassageiro', 'PassageiroController@sairCorrida');
 	
 });

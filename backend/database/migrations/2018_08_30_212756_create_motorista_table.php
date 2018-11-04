@@ -20,7 +20,8 @@ class CreateMotoristaTable extends Migration
 			$table->string('modelo',7);
 			$table->string('placa',7);
 			$table->string('corCarro',10);
-			$table->float('nota', 1, 1);
+			$table->integer('qtCorridas');
+			$table->float('nota', 5, 1);
             $table->timestamps();
         });
     }

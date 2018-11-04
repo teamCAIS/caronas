@@ -1,24 +1,16 @@
 <?php
-
 namespace App;
-
 use Illuminate\Database\Eloquent\Model;
 
-class Motorista extends Model
+class Motorista extends Model 
 {
-    protected $table = 'motorista';
-	protected $fillable = [
-		'id_usuario', 'modelo','placa', 'corCarro','nota'
-	];
-	/**
-	 * The attributes that should be hidden for arrays.
-	 *
-	 * @var array
-	 */
-	protected $hidden = [
-	];
-	/**
-	 * Get the identifier that will be stored in the subject claim of the JWT.
-	 * @return mixed
-	 */
+	public function getPerfil($id_motorista){
+		$id = $id_motorista;
+		$infos = \DB::table('pessoa')
+						->leftjoin('motorista','pessoa.id','=','motorista.id_usuario')
+						->select('pessoa.*','motorista.modelo','motorista.placa','motorista.corCarro','motorista.qtCorridas','motorista.nota')
+						->where('pessoa.id',$id)
+						->get();
+		return $infos;
+	}
 }

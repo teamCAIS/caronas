@@ -15,6 +15,7 @@ class Controller extends BaseController
 	public function cadastro(Request $request){
 		$usuario = ['nome' => $request['nome'],
 					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
+					'genero' => $request['genero'],
 					'email' => $request['email'],
 					'password' => HASH::make($request['password']), 
 					'codigo_validacao' => $request['codigo_validacao'],
@@ -40,11 +41,12 @@ class Controller extends BaseController
 		\DB::table('pessoa')->where('id',$linha->id)->update(
 			array(
 				'nome' => $usuario['nome'],
-				'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-				'email' => $request['email'], 
-				'password' => HASH::make($request['password']),
+				'nascimento' => $usuario['nascimento'],
+				'genero' => $usuario['genero'],
+				'email' => $usuario['email'], 
+				'password' => $usuario['password'],
 				'codigo_validacao' => '',
-				'tipo' => $request['tipo'])
+				'tipo' => $usuario['tipo'])
 		);
 	}
 }
