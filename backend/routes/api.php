@@ -27,4 +27,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/indexPassageiro', 'PassageiroController@getInfo');
 	Route::get('/feedPassageiro', 'PassageiroController@getCorridas');
 	Route::get('/historicoPassageiro', 'PassageiroController@getHistorico');
+	Route::get('/setCorridaPassageiro', 'PassageiroController@setCorrida');
+	Route::get('/sairCorridaPassageiro', 'PassageiroController@sairCorrida');
+	
 });
