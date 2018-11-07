@@ -20,8 +20,10 @@ class CreatePessoaTable extends Migration
 			$table->integer('genero');
 			$table->string('email',100);
 			$table->string('password',200);
-			$table->string('codigo_validacao',8)->default('000000');
 			$table->integer('tipo');
+			$table->string('url_foto',50)->default('');
+			$table->string('codigo_validacao',8)->default('000000');
+			$table->integer('status')->default(0);
             $table->timestamps();
         });
 		for($i = 0; $i < 10; $i++){
@@ -33,11 +35,13 @@ class CreatePessoaTable extends Migration
 					array(
 						'nome' => '',
 						'nascimento' => date('Y-m-d'),
-						'genero', rand(0,1),
+						'genero' => rand(0,1),
 						'email' => '',
 						'password' => '',
+						'tipo' => 0,
+						'url_foto' => '',
 						'codigo_validacao'=>$resultado_final,
-						'tipo' => 0
+						'status' => 0
 					)
 			);
 		}

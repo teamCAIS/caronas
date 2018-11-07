@@ -19,15 +19,10 @@ class PassageiroController extends BaseController
         $this->passageiro = $obj;
     }
 	
-	public function perfil(){
-		$usuario = auth()->user();
-		$id = $usuario['id'];
-		return $this->passageiro->getPerfil($id);
-	}
 	public function entrarCorrida(Request $request){
 		$user = auth()->user();
 		$id = $user['id'];
-		$id_corrida = 2;
+		$id_corrida = $request['id_corrida'];
 		return $this->passageiro->setCorrida($id,$id_corrida);
 	}
 	public function corridaAtual(){
@@ -44,8 +39,7 @@ class PassageiroController extends BaseController
 		$usuario = auth()->user();
 		$id = $usuario['id'];
 		$tipo = $usuario['tipo'];
-		//$filtro = [intval($request['filtroGenero']),$request['filtroSaida'],$request['filtroHora']];
-		$filtro = [2,'',''];
+		$filtro = [intval($request['filtroGenero']),$request['filtroSaida'],$request['filtroHora']];
 		if($filtro[0] == 2 and $filtro[1] == "" and $filtro[2] == ""){
 			$filtro = [];
 		}
@@ -56,16 +50,5 @@ class PassageiroController extends BaseController
 		$id = $usuario['id'];
 		return $this->passageiro->getHistorico($id);
 	}
-	public function editarPerfil(Request $request){
-		$usu = auth()->user();
-		$id = $usu['id'];
-		$usuario = ['nome' => $request['nome'],
-					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-					'genero' => $request['genero'],
-					'email' => $request['email'],
-					'password' => HASH::make($request['password']), 
-					'tipo' => $request['tipo']
-					];
-		return $this->passageiro->setPerfil($id,$usuario);
-	}
+
 }

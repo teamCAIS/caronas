@@ -34,20 +34,6 @@ class Passageiro extends Model
 			}
 		}
 	}
-	public function setPerfil($id_passageiro,$usu){
-		$id = $id_passageiro;
-		$usuario = $usu;
-		\DB::table('pessoa')->where('id',$id)->update(
-			array(
-				'nome' => $usuario['nome'],
-				'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
-				'genero' -> $usuario['genero'],
-				'email' => $usuario['email'], 
-				'password' => HASH::make($usuario['password']),
-				'codigo_validacao' => '',
-				'tipo' => $usuario['tipo'])
-		);
-	}
 	public function emCorrida($id){
 		$corrida = self::getCorridaAtual($id);
 		if($corrida->isEmpty()){
@@ -85,7 +71,7 @@ class Passageiro extends Model
 							'pessoa.nome','pessoa.genero','motorista.modelo','motorista.placa','motorista.corCarro','motorista.nota',\DB::raw('group_concat(corrida_ativa.id_passageiro) as passageiros'))
 							->groupBy('corridas.id')
 							->orderBy('corridas.id','desc')
-							->where(['status' => 0,['corridas.vagas','>',0]])
+							->where(['corridas.status' => 0,['corridas.vagas','>',0]])
 							->orderBy('id', 'desc')
 							->take(10);
 			if(!empty($filtros)){
@@ -119,13 +105,6 @@ class Passageiro extends Model
 			}
 		}
 	}
-	public function getPerfil($id_passageiro){
-		$id = $id_passageiro;
-		$infos = \DB::table('pessoa')
-						->where('id',$id)
-						->get();
-		return $infos;
-	}
 	public function getHistorico($id_passageiro){
 		$id = $id_passageiro;
 		$corridasHistorico = \DB::table('historico')
@@ -137,6 +116,7 @@ class Passageiro extends Model
 									->havingRaw('Find_In_Set(?, passageiros)',[$id])
 									->groupBy('historico.id_corrida')
 									->orderBy('corridas.id','desc')
+									->where('corridas.status',1)
 									->get();
 		if($corridasHistorico->isEmpty()){
 			return response()->json([
@@ -173,5 +153,4 @@ class Passageiro extends Model
 					]);
 		}
 	}
-	
 }

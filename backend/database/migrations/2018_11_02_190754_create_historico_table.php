@@ -19,6 +19,8 @@ class CreateHistoricoTable extends Migration
 			$table->foreign('id_corrida')->references('id')->on('corridas');
 			$table->integer('id_passageiro')->unsigned();
 			$table->foreign('id_passageiro')->references('id')->on('pessoa');
+			$table->float('nota', 5, 1);
+			$table->integer('status_nota')->default(0);
             $table->timestamps();
         });
     }
