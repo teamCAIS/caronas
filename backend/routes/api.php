@@ -44,5 +44,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::get('/historicoPassageiro', 'PassageiroController@historico');
 	Route::post('/entrarCorridaPassageiro', 'PassageiroController@entrarCorrida');
 	Route::get('/sairCorridaPassageiro', 'PassageiroController@sairCorrida');
+	Route::post('/avaliarCorridaPassageiro', 'PassageiroController@avaliar');
 
 });
