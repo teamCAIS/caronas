@@ -27,6 +27,7 @@ Route::post('/preCadastro', 'Controller@preCadastro');
 Route::post('/', 'AuthController@login');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
+	
 	Route::post('/cadastroFinalUsuario', 'Controller@cadastroFinal');
     Route::get('/indexUsuario', 'Controller@verPerfil');
 	Route::post('/editarUsuario', 'Controller@editarPerfil');

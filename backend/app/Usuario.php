@@ -69,19 +69,34 @@ class Usuario extends Model
 	public function setPerfil($id_usuario, $infos){
 		$id = $id_usuario;
 		$usuario = $infos;
-		\DB::table('pessoa')->where('id',$id)->update(
-			array(
-				'nome' => $usuario['nome'],
-				'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
-				'genero' -> $usuario['genero'],
-				'email' => $usuario['email'], 
-				'password' => HASH::make($usuario['password']),
-				'tipo' => $usuario['tipo'],
-				'codigo_validacao' => '',
-				'url_foto' => $usuario['url_foto'],
-				'status' => 1
-			)
-		);
+		if($usuario['url_foto']!=""){
+			\DB::table('pessoa')->where('id',$id)->update(
+				array(
+					'nome' => $usuario['nome'],
+					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
+					'genero' -> $usuario['genero'],
+					'email' => $usuario['email'], 
+					'password' => HASH::make($usuario['password']),
+					'tipo' => $usuario['tipo'],
+					'codigo_validacao' => '',
+					'url_foto' => $usuario['url_foto'],
+					'status' => 1
+				)
+			);
+		}else{
+			\DB::table('pessoa')->where('id',$id)->update(
+				array(
+					'nome' => $usuario['nome'],
+					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
+					'genero' -> $usuario['genero'],
+					'email' => $usuario['email'], 
+					'password' => HASH::make($usuario['password']),
+					'tipo' => $usuario['tipo'],
+					'codigo_validacao' => '',
+					'status' => 1
+				)
+			);	
+		}
 	}
 	public function setTipoPerfil($id_usuario,$tipo_perfil){
 		$id = $id_usuario;
