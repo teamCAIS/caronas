@@ -87,24 +87,28 @@ class Passageiro extends Model
 									->orderBy('corridas.id','desc')
 									->take(1)
 									->get();
-		$corrida = json_decode($corrida,true);
-		$data = explode(" ",$corrida[0]['data_hora']);
-		$corrida[0]['data'] = $data[0];
-		$corrida[0]['hora'] = $data[1];		
-		$corrida[0]['atual'] = true;
-		unset($corrida[0]['data_hora']);
-		$passageiros = explode(",",$corrida[0]['passageiros']);
-		$corrida[0]['passageiros'] = [];
-		
-		foreach($passageiros as $passageiro){
-			$pessoa = \DB::table('pessoa')
-						->select('nome','url_foto')
-						->where('id',intval($passageiro))
-						->get();
-			$pessoa = json_decode($pessoa,true);
-			array_push($corrida[0]['passageiros'],$pessoa[0]);
+		if(!($corrida->isEmpty())){
+			$corrida = json_decode($corrida,true);
+			$data = explode(" ",$corrida[0]['data_hora']);
+			$corrida[0]['data'] = $data[0];
+			$corrida[0]['hora'] = $data[1];		
+			$corrida[0]['atual'] = true;
+			unset($corrida[0]['data_hora']);
+			$passageiros = explode(",",$corrida[0]['passageiros']);
+			$corrida[0]['passageiros'] = [];
+			
+			foreach($passageiros as $passageiro){
+				$pessoa = \DB::table('pessoa')
+							->select('nome','url_foto')
+							->where('id',intval($passageiro))
+							->get();
+				$pessoa = json_decode($pessoa,true);
+				array_push($corrida[0]['passageiros'],$pessoa[0]);
+			}
+			return $corrida;
+		}else{
+			return [];
 		}
-		return $corrida;
 	}
 	public function getCorridas($id_passageiro, $filtragem){
 		$id = $id_passageiro;
@@ -112,16 +116,19 @@ class Passageiro extends Model
 		$avaliacao = self::checkAvaliacao($id);
 		$corrida = self::getCorridaAtual($id);
 		$feed = \DB::table('corridas')
-						->leftjoin('corrida_ativa', 'corridas.id', '=', 'corrida_ativa.id_corrida')
-						->join('motorista', 'corridas.id_motorista', '=', 'motorista.id')
-						->join('pessoa', 'motorista.id_usuario', '=', 'pessoa.id')
-						->select('corridas.id','corridas.saida','corridas.pontoEncontro','corridas.data_hora','corridas.vagas',
-						'pessoa.nome','pessoa.genero','motorista.modelo','motorista.placa','motorista.corCarro','motorista.nota',\DB::raw('group_concat(corrida_ativa.id_passageiro) as passageiros'))
-						->groupBy('corridas.id')
-						->orderBy('corridas.id','desc')
-						->where(['corridas.status' => 0,['corridas.vagas','>',0],['corridas.id','<>',intval($corrida[0]['id'])]])
-						->orderBy('id', 'desc')
-						->take(10);
+							->leftjoin('corrida_ativa', 'corridas.id', '=', 'corrida_ativa.id_corrida')
+							->join('motorista', 'corridas.id_motorista', '=', 'motorista.id')
+							->join('pessoa', 'motorista.id_usuario', '=', 'pessoa.id')
+							->select('corridas.id','corridas.saida','corridas.pontoEncontro','corridas.data_hora','corridas.vagas',
+							'pessoa.nome','pessoa.genero','motorista.modelo','motorista.placa','motorista.corCarro','motorista.nota',\DB::raw('group_concat(corrida_ativa.id_passageiro) as passageiros'))
+							->groupBy('corridas.id')
+							->orderBy('corridas.id','desc')
+							->where(['corridas.status' => 0,['corridas.vagas','>',0]])
+							->orderBy('id', 'desc')
+							->take(10);
+		if(!empty($corrida))
+			$feed->where([['corridas.id','<>',intval($corrida[0]['id'])]]);
+			
 		if(!empty($filtros)){
 			$genero = $filtros[0];
 			$saida = $filtros[1];
@@ -164,6 +171,8 @@ class Passageiro extends Model
 			}
 			array_push($feedFinal,$corridafeed);
 		}
+		if(empty($feedFinal))
+			$feedFinal = [];
 		if(empty($corrida)){
 			if($avaliacao==false){
 				return $feedFinal;

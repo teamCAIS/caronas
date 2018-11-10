@@ -11,4 +11,14 @@
 |
 */
 
-//eyJpdiI6Ikc2UXl1aGNEQmh3WVJhV3Bvd2FNWFE9PSIsInZhbHVlIjoiVEJudWhNcGx0MXdcL29zN0g1QVFsK3g2MjE4UlJhR0dTT3k1XC9FOFl2NlpUTXlVUFwvYTZvb1RvVVR1ODZQNVBoZSIsIm1hYyI6IjcyZjNlYjk1MzM0OTMyYjIxOTY0NDc1MTk4Y2YwNTFiNmJmYTkyNDEyNDJjYWI3NTA4NDk0MjE5NjE4YjRhMGEifQ==
+Route::get('/admin',function(){
+	return view('admin-login');
+})->name('admin.login')->middleware('adminsession');
+Route::post('/admin', 'AdmController@login');
+
+Route::group(['middleware' => 'auth.unique.user'], function () {
+	Route::get('/adm_index','AdmController@getPreCadastros')->name('admin.index');
+	Route::get('/adm_validarusuario/{id}', 'AdmController@aceitar')->name('admin.validarUsuario');
+	Route::get('/adm_recusarusuario/{id}', 'AdmController@recusar')->name('admin.recusarUsuario');
+	Route::get('/adm_logout/', 'AdmController@logout')->name('admin.logout');
+});

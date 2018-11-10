@@ -26,25 +26,6 @@ class CreatePessoaTable extends Migration
 			$table->integer('status')->default(0);
             $table->timestamps();
         });
-		for($i = 0; $i < 10; $i++){
-			$numero_de_bytes = 4;
-			$restultado_bytes = random_bytes($numero_de_bytes);
-			$resultado_final = bin2hex($restultado_bytes);
-			$resultado_final = strtoupper($resultado_final);
-			\DB::table('pessoa')->insert(
-					array(
-						'nome' => '',
-						'nascimento' => date('Y-m-d'),
-						'genero' => rand(0,1),
-						'email' => '',
-						'password' => '',
-						'tipo' => 0,
-						'url_foto' => '',
-						'codigo_validacao'=>$resultado_final,
-						'status' => 0
-					)
-			);
-		}
 	}
     /**
      * Reverse the migrations.

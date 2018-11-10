@@ -21,7 +21,7 @@ class MotoristaController extends BaseController
 	public function checkTipo(){
 		$user = auth()->user();
 		$tipo = $user['tipo'];
-		if($tipo==1){
+		if( $tipo==1 || $tipo == 0){
 			return false;
 		}else{
 			return true;
@@ -39,7 +39,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}
@@ -52,7 +52,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}
@@ -68,7 +68,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}
@@ -81,7 +81,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}
@@ -94,7 +94,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}
@@ -107,7 +107,7 @@ class MotoristaController extends BaseController
 		}else{
 			return response()->json([
 				'status' => 'error', 
-				'message' => 'Você é um passageiro.'
+				'message' => 'Essa página não é para seu tipo de perfil'
 			]);
 		}
 	}

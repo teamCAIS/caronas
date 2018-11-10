@@ -24,7 +24,7 @@ class Controller extends BaseController
 		if($request->hasFile('documento') && $request->file('documento')->isValid()){
 			$nome = uniqid(date('HisYmd'));
 			$extensao = $request->documento->extension();
-			$url = "{$nome}.{$extensao}";
+			$url = "{$request['email']}-{$nome}.{$extensao}";
 			$upload = $request->documento->storeAs('documentoComprobatorio',$url);
 			$url = "storage/app/public/documentoComprobatorio/".$url;
 			if (!$upload)
@@ -71,13 +71,14 @@ class Controller extends BaseController
 	public function editarPerfil(Request $request){
 		$usuario = auth()->user();
 		$id = $usuario['id'];
+		$nomeUsuario = $usuario['nome'];
 		$url = null;
 		if($request->hasFile('image') && $request->file('image')->isValid()){
 			$nome = uniqid(date('HisYmd'));
 			$extensao = $request->image->extension();
 			$url = "{$nome}.{$extensao}";
 			$upload = $request->image->storeAs('perfil',$url);
-			$url = "storage/app/public/perfil/".$url;
+			$url = "storage/app/public/perfil/{$id}-{$nome}-".$url;
 			if (!$upload)
 				return redirect()
 							->back()
@@ -112,8 +113,10 @@ class Controller extends BaseController
 		return $this->usuario->setTipoPerfil($id,$tipo_perfil);
 	}
 	public function checarCadastro(Request $request){
+		$usuario = auth()->user();
+		$id = $usuario['id'];
 		$codigo_validacao = $request['codigo_validacao'];
-		$vazio = $this->usuario->checkCadastro($codigo_validacao);
+		$vazio = $this->usuario->checkCadastro($id,$codigo_validacao);
 		if(!$vazio){
 			return response()->json([
 				'status' => 'success', 
@@ -125,5 +128,16 @@ class Controller extends BaseController
 				'message' => 'O código não existe'
 			]);
 		}
+	}
+	public function checarTipo(){
+		$usuario = auth()->user();
+		$id = $usuario['id'];
+		return $this->usuario->checkTipo($id);
+	}
+	public function denunciar(Request $request){
+		$usuario = auth()->user();
+		$id = $usuario['id'];
+		$denuncia = ['id_denunciado' => $request['id_denunciado'],'tipo' => $request['tipo'],'comentario'=> $request['comentario']];
+		return $this->usuario->setDenuncia($id,$denuncia);
 	}
 }

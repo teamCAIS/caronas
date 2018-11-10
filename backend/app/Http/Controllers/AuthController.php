@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use DB;
 use JWTAuth;
 use Validator;
+use Mail;
 class AuthController extends Controller
 {
 	/**
@@ -12,9 +13,10 @@ class AuthController extends Controller
 	 * @param Request $request
 	 * @return JsonResponse
 	 */
+
 	public function login(Request $request)
 	{
-		auth()->shouldUse('pessoas');
+		auth()->shouldUse('api');
 		$email = $request->input('email');
 		$password = $request->input('password');
 		$credentials = ['email'=>$email, 'password'=>$password];
@@ -67,7 +69,7 @@ class AuthController extends Controller
 			JWTAuth::invalidate($token);
 			return response()->json([
 				'status' => 'success', 
-				'message'=> "User successfully logged out."
+				'message'=> 'Deslogado'
 			]);
 		} catch (JWTException $e) {
 			// something went wrong whilst attempting to encode the token

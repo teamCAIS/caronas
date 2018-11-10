@@ -32,6 +32,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/indexUsuario', 'Controller@verPerfil');
 	Route::post('/editarUsuario', 'Controller@editarPerfil');
 	Route::post('/checarCadastroUsuario', 'Controller@checarCadastro');
+	Route::get('/checarTipoUsuario', 'Controller@checarTipo');
 	Route::post('/mudarTipoPerfilUsuario', 'Controller@mudarTipoPerfil');
 	
 	Route::post('/criarCorridaMotorista','MotoristaController@criarCorrida');

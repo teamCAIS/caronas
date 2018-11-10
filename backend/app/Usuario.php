@@ -66,6 +66,37 @@ class Usuario extends Model
 				]);
 		}
 	}
+	public function setDenuncia($id_usuario,$info_denuncia){
+		$id = $id_usuario;
+		$id_denunciado = $info_denuncia['id_denunciado'];
+		$tipo_denuncia = $info_denuncia['tipo'];
+		$comentario_denuncia = $info_denuncia['comentario'];
+		if(count($id_denunciado)==1){
+			\DB::table('denuncia')->insert(	
+										array(
+											'id_denunciante'=>$id,
+											'id_denunciado'=>$id_denunciado,
+											'tipo'=>$tipo_denuncia,
+											'comentario'=>$comentario_denuncia,
+											'data'=> date('Y-m-d H:i:s')
+											));
+		}else{
+			foreach($id_denunciado as $id_denuncia){
+				\DB::table('denuncia')->insert(	
+										array(
+											'id_denunciante'=>$id,
+											'id_denunciado'=>$id_denuncia,
+											'tipo'=>$tipo_denuncia,
+											'comentario'=>$comentario_denuncia,
+											'data'=> date('Y-m-d H:i:s')
+											));
+			}
+		}
+		return response()->json([
+			'status' => 'success', 
+			'message' => 'A denúncia será analisada o mais rápido possível, verifique seu e-mail.'
+		]);
+	}
 	public function setPerfil($id_usuario, $infos){
 		$id = $id_usuario;
 		$usuario = $infos;
@@ -111,13 +142,17 @@ class Usuario extends Model
 				'message' => 'Você mudou de perfil com sucesso.'
 			]);
 	}
-	public function checkCadastro($codigo){
-		$linha = \DB::table('pessoa')->where('codigo_validacao', $codigo)->get();
+	public function checkCadastro($id,$codigo){
+		$linha = \DB::table('pessoa')->where(['id'=>$id,'codigo_validacao'=>$codigo])->get();
 		if($linha->isEmpty()){
 			return true;
 		}else{
 			return false;
 		}
+	}
+	public function checkTipo($id){
+		$linha = \DB::table('pessoa')->select('tipo')->where('id',$id)->get();
+		return $linha;
 	}
 	public function getPerfil($id_usuario, $tipo_usuario){
 		$id = $id_usuario;

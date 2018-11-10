@@ -36,7 +36,8 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+		'guard' => 'api',
+		'guard' => 'admin',
         'passwords' => 'users',
     ],
    'guards' => [
@@ -44,9 +45,9 @@ return [
             'driver' => 'jwt',
             'provider' => 'pessoas',
         ],
-		'pessoas' => [
-            'driver' => 'session',
-            'provider' => 'pessoas',
+		'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'adm',
         ],
     ],
 
@@ -68,9 +69,9 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'adm' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => App\Admin::class,
         ],
 
         'pessoas' => [
