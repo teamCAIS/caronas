@@ -47,15 +47,17 @@
 					/*id_corrida: 1,
 					nota: 4.0,
 					status_nota:1*/
-					filtroGenero: 2,
+					/*filtroGenero: 2,
 					filtroSaida: "",
-					filtroHora: ""
+					filtroHora: ""*/
 					//id_corrida: 1
-					//codigo_validacao: "26AD8AA6"
+					codigo_validacao: "6974C96B",
+					url_foto: "",
+					tipo: 1
 				}
-				fetch('../public/api/feedPassageiro', {
-					method: 'post',
-					body: JSON.stringify(infos),
+				fetch('../public/api/checarTipoUsuario', {
+					method: 'get',
+					//body: JSON.stringify(infos),
 					headers: {
 						"Content-Type": "application/json",
 						"Authorization": "bearer "+result['data']['token']
