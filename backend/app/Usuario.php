@@ -25,7 +25,7 @@ class Usuario extends Model
 	public function setCadastro($id_usuario,$perfil){
 		$id = $id_usuario;
 		$perfil_usuario = $perfil;
-		$cadastrado = self::checkCadastro($perfil_usuario['codigo_validacao']);
+		$cadastrado = self::checkCadastro($id,$perfil_usuario['codigo_validacao']);
 		if(!$cadastrado){
 			if($perfil_usuario['tipo'] == 2){
 				\DB::table('pessoa')->where('id',$id)->update(
