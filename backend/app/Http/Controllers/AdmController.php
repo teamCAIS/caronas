@@ -68,7 +68,9 @@ class AdmController extends Controller
 	}
 	public function login(Request $request)
 	{
-		auth()->shouldUse('admin');
+		auth()->shouldUse('api');
+		\Config::set('jwt.user', 'App\Admin'); 
+        \Config::set('auth.providers.pessoas.model', \App\Admin::class);
 		$email = $request->input('email');
 		$password = $request->input('password');
 		$credentials = ['email'=>$email, 'password'=>$password];

@@ -81,7 +81,6 @@ class Motorista extends Model
 		$id = $id_usuario;
 		$id_motorista = self::getIdMotorista($id);
 		$corridaAtual = self::getCorridaAtual($id);
-		$corridaAtual = json_decode($corridaAtual,true);
 		$passageiros = \DB::table('corrida_ativa')->where('id_corrida',$corridaAtual[0]['id'])->get();
 		$passageiros = json_decode($passageiros,true);
 		foreach($passageiros as $passageiro){
@@ -106,7 +105,7 @@ class Motorista extends Model
 	public function emCorrida($id_usuario){
 		$id = $id_usuario;
 		$corrida = self::getCorridaAtual($id);
-		if($corrida->isEmpty()){
+		if(Empty($corrida)){
 			return false;
 		}else{
 			return true;
@@ -137,24 +136,29 @@ class Motorista extends Model
 									->where(['corridas.id_motorista' => $id_motorista,['corridas.status','=',0]])
 									->take(1)
 									->get();
-		
-		$corrida = json_decode($corrida,true);
-		$data = explode(" ",$corrida[0]['data_hora']);
-		$corrida[0]['data'] = $data[0];
-		$corrida[0]['hora'] = $data[1];		
-		unset($corrida[0]['data_hora']);
-		$passageiros = explode(",",$corrida[0]['passageiros']);
-		$corrida[0]['passageiros'] = [];
-		
-		foreach($passageiros as $passageiro){
-			$pessoa = \DB::table('pessoa')
-						->select('nome','url_foto')
-						->where('id',intval($passageiro))
-						->get();
-			$pessoa = json_decode($pessoa,true);
-			array_push($corrida[0]['passageiros'],$pessoa[0]);
+		if(!($corrida->isEmpty())){
+			$corrida = json_decode($corrida,true);
+			$data = explode(" ",$corrida[0]['data_hora']);
+			$corrida[0]['data'] = $data[0];
+			$corrida[0]['hora'] = $data[1];		
+			unset($corrida[0]['data_hora']);
+			$passageiros = explode(",",$corrida[0]['passageiros']);
+			if($passageiros[0]==""){
+				$passageiros = [];
+			}
+			$corrida[0]['passageiros'] = [];
+			if(!Empty($passageiros))
+				foreach($passageiros as $passageiro){
+					$pessoa = \DB::table('pessoa')
+								->select('nome','url_foto')
+								->where('id',intval($passageiro))
+								->get();
+					$pessoa = json_decode($pessoa,true);
+					array_push($corrida[0]['passageiros'],$pessoa[0]);
+				}
+			return $corrida;
 		}
-		return $corrida;
+		return [];
 	}
 	public function getHistorico($id_usuario){
 		$id = $id_usuario;
@@ -171,24 +175,28 @@ class Motorista extends Model
 									->get();					
 		$corridasHistorico = json_decode($corridasHistorico,true);
 		$historicoFinal = [];
-		foreach($corridasHistorico as $corrida){ 
-			$data = explode(" ",$corrida['data_hora']);
-			$corrida['data'] = $data[0];
-			$corrida['hora'] = $data[1];		
-			unset($corrida['data_hora']);
-			$passageiros = explode(",",$corrida['passageiros']);
-			$corrida['passageiros'] = [];
-			
-			foreach($passageiros as $passageiro){
-				$pessoa = \DB::table('pessoa')
-							->select('nome','url_foto')
-							->where('id',intval($passageiro))
-							->get();
-				$pessoa = json_decode($pessoa,true);
-				array_push($corrida['passageiros'],$pessoa[0]);
+		if(!Empty($corridasHistorico))
+			foreach($corridasHistorico as $corrida){ 
+				$data = explode(" ",$corrida['data_hora']);
+				$corrida['data'] = $data[0];
+				$corrida['hora'] = $data[1];		
+				unset($corrida['data_hora']);
+				$passageiros = explode(",",$corrida['passageiros']);
+				if($passageiros[0]==""){
+					$passageiros = [];
+				}
+				$corrida['passageiros'] = [];
+				if(!Empty($passageiros))
+					foreach($passageiros as $passageiro){
+						$pessoa = \DB::table('pessoa')
+									->select('nome','url_foto')
+									->where('id',intval($passageiro))
+									->get();
+						$pessoa = json_decode($pessoa,true);
+						array_push($corrida['passageiros'],$pessoa[0]);
+					}
+				array_push($historicoFinal,$corrida);
 			}
-			array_push($historicoFinal,$corrida);
-		}
 		
 		if(empty($historicoFinal)){
 			return response()->json([
@@ -199,12 +207,25 @@ class Motorista extends Model
 			return $historicoFinal;
 		}
 	}
+	public function inserirInformacoes($id_usuario,$infos){
+		\DB::table('motorista')->insert(array(
+			'id_usuario' => $id_usuario,
+			'modelo' => $infos['modeloCarro'],
+			'placa' => $infos['placaCarro'],
+			'corCarro' => $infos['corCarro'],
+			'qtCorridas' => 0,
+			'nota' => 0
+		));
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Você inseriu suas informações com sucesso'
+		]);
+	}
 	public function deleteCorrida($id_usuario){
 		$id = $id_usuario;
 		$id_motorista = self::getIdMotorista($id);
 		$corridaAtual = self::getCorridaAtual($id);
-		if(!($corridaAtual->isEmpty())){
-			$corridaAtual = json_decode($corridaAtual, true);
+		if(!(Empty($corridaAtual))){
 			$id_corrida = $corridaAtual[0]['id'];
 			\DB::table('corridas')
 						->where('id',$id_corrida)

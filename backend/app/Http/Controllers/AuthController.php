@@ -17,6 +17,8 @@ class AuthController extends Controller
 	public function login(Request $request)
 	{
 		auth()->shouldUse('api');
+		\Config::set('jwt.user', 'App\Pessoa'); 
+        \Config::set('auth.providers.pessoas.model', \App\Pessoa::class);
 		$email = $request->input('email');
 		$password = $request->input('password');
 		$credentials = ['email'=>$email, 'password'=>$password];

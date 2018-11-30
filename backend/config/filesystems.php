@@ -54,7 +54,17 @@ return [
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
         ],
-
+		'dropbox' => [
+		  'driver' => 'dropbox',
+		  'token' => env('DROPBOX_TOKEN'),
+		],
+		 'google' => [
+            'driver' => 'google',
+            'clientId' => env('GOOGLE_DRIVE_CLIENT_ID','893024369073-4l5dsg7il18m7nmgkbj52g0q1mokqpdm.apps.googleusercontent.com'),
+            'clientSecret' => env('GOOGLE_DRIVE_CLIENT_SECRET','GknazVDdW77uD1US7BuspTsZ'),
+            'refreshToken' => env('GOOGLE_DRIVE_REFRESH_TOKEN','1/oaUY4ab7V3mFGd7jGMcaK3TowSM8TF6I5Qcg5EyDEz0'),
+            'folderId' => env('GOOGLE_DRIVE_FOLDER_ID','1FYxsrnWohquUewgi7sTuSIJfe7LdGspg'),
+        ],
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

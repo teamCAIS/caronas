@@ -56,7 +56,7 @@ class MotoristaController extends BaseController
 			]);
 		}
 	}
-	public function editarCorrida(){
+	public function editarCorrida(Request $request){
 		$usuario = auth()->user();
 		$id = $usuario['id'];
 		$check = self::checkTipo();
@@ -78,6 +78,20 @@ class MotoristaController extends BaseController
 		$check = self::checkTipo();
 		if($check){
 			return $this->motorista->concludeCorrida($id);
+		}else{
+			return response()->json([
+				'status' => 'error', 
+				'message' => 'Essa página não é para seu tipo de perfil'
+			]);
+		}
+	}
+	public function inserirInfos(Request $request){
+		$usuario = auth()->user();
+		$id = $usuario['id'];
+		$check = self::checkTipo();
+		if($check){
+			$infos = ['modeloCarro' => $request['modeloCarro'], 'corCarro' => $request['corCarro'], 'placaCarro' => $request['placaCarro']];
+			return $this->motorista->inserirInformacoes($id,$infos);
 		}else{
 			return response()->json([
 				'status' => 'error', 

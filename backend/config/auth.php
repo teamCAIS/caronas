@@ -37,17 +37,12 @@ return [
 
     'defaults' => [
 		'guard' => 'api',
-		'guard' => 'admin',
         'passwords' => 'users',
     ],
    'guards' => [
         'api' => [
             'driver' => 'jwt',
             'provider' => 'pessoas',
-        ],
-		'admin' => [
-            'driver' => 'jwt',
-            'provider' => 'adm',
         ],
     ],
 
@@ -69,10 +64,6 @@ return [
     */
 
     'providers' => [
-        'adm' => [
-            'driver' => 'eloquent',
-            'model' => App\Admin::class,
-        ],
 
         'pessoas' => [
 			'driver' => 'eloquent',

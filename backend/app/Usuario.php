@@ -75,7 +75,7 @@ class Usuario extends Model
 			\DB::table('denuncia')->insert(	
 										array(
 											'id_denunciante'=>$id,
-											'id_denunciado'=>$id_denunciado,
+											'id_denunciado'=>$id_denunciado[0],
 											'tipo'=>$tipo_denuncia,
 											'comentario'=>$comentario_denuncia,
 											'data'=> date('Y-m-d H:i:s')
@@ -97,37 +97,56 @@ class Usuario extends Model
 			'message' => 'A denúncia será analisada o mais rápido possível, verifique seu e-mail.'
 		]);
 	}
-	public function setPerfil($id_usuario, $infos){
+	public function setBuscaPorNome($id_usuario,$nome){
+		$id = $id_usuario;
+		$nome_usuario = $nome;
+		$query = \DB::table('pessoa')->select('id','nome','url_foto')->where([['nome','LIKE',"{$nome_usuario}%"],['id','<>',$id]])->get();
+		if($query->isEmpty()){
+			return response()->json([
+				'status' => 'error', 
+				'message' => 'Usuário não encontrado'
+			]);
+		}else{
+			return $query;
+		}
+	}
+	public function setPerfil($id_usuario, $tipo_usuario, $infos){
 		$id = $id_usuario;
 		$usuario = $infos;
+		$tipo = $tipo_usuario;
 		if($usuario['url_foto']!=""){
 			\DB::table('pessoa')->where('id',$id)->update(
 				array(
 					'nome' => $usuario['nome'],
-					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
-					'genero' -> $usuario['genero'],
+					'genero' => $usuario['genero'],
 					'email' => $usuario['email'], 
-					'password' => HASH::make($usuario['password']),
-					'tipo' => $usuario['tipo'],
-					'codigo_validacao' => '',
-					'url_foto' => $usuario['url_foto'],
-					'status' => 1
+					'password' => $usuario['password'],
+					'url_foto' => $usuario['url_foto']
 				)
 			);
 		}else{
 			\DB::table('pessoa')->where('id',$id)->update(
 				array(
 					'nome' => $usuario['nome'],
-					'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $usuario['nascimento']))),
-					'genero' -> $usuario['genero'],
 					'email' => $usuario['email'], 
-					'password' => HASH::make($usuario['password']),
-					'tipo' => $usuario['tipo'],
-					'codigo_validacao' => '',
-					'status' => 1
+					'password' => $usuario['password'],
+					'genero' => $usuario['genero'],
 				)
 			);	
 		}
+		if($tipo_usuario==2){
+			\DB::table('motorista')->where('id_usuario',$id)->update(
+				array(
+					'modelo' => $usuario['modeloCarro'],
+					'corCarro' => $usuario['corCarro'],
+					'placa' => $usuario['placaCarro'],
+				)
+			);
+		}
+		return response()->json([
+			'status' => 'success',
+			'message' => 'Você editou seu perfil com sucesso'
+		]);
 	}
 	public function setTipoPerfil($id_usuario,$tipo_perfil){
 		$id = $id_usuario;
@@ -137,10 +156,26 @@ class Usuario extends Model
 				'tipo' => $tipo
 				)
 			);
-		return response()->json([
-				'status' => 'success', 
-				'message' => 'Você mudou de perfil com sucesso.'
-			]);
+		if($tipo == 2){
+			$query = \DB::table('motorista')->where('id_usuario',$id)->get();
+			if($query->isEmpty()){
+				return response()->json([
+					'status' => 'success', 
+					'message' => 'Você mudou de perfil com sucesso.',
+					'primeiro' => true
+				]);
+			}else{
+				return response()->json([
+					'status' => 'success', 
+					'message' => 'Você mudou de perfil com sucesso.'
+				]);
+			}
+		}else{
+			return response()->json([
+					'status' => 'success', 
+					'message' => 'Você mudou de perfil com sucesso.'
+				]);
+		}
 	}
 	public function checkCadastro($id,$codigo){
 		$linha = \DB::table('pessoa')->where(['id'=>$id,'codigo_validacao'=>$codigo])->get();

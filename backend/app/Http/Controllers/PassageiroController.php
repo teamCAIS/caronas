@@ -65,7 +65,7 @@ class PassageiroController extends BaseController
 		$check = self::checkTipo();
 		if($check){
 			$filtro = [intval($request['filtroGenero']),$request['filtroSaida'],$request['filtroHora']];
-			if($filtro[0] == 2 and $filtro[1] == "" and $filtro[2] == ""){
+			if($filtro[0] == 3 and $filtro[1] == "" and $filtro[2] == ""){
 				$filtro = [];
 			}
 			return $this->passageiro->getCorridas($id,$filtro);

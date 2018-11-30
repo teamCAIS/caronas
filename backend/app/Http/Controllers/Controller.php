@@ -9,6 +9,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Hash;
 use App\Usuario;
+use Storage;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -25,8 +26,8 @@ class Controller extends BaseController
 			$nome = uniqid(date('HisYmd'));
 			$extensao = $request->documento->extension();
 			$url = "{$request['email']}-{$nome}.{$extensao}";
-			$upload = $request->documento->storeAs('documentoComprobatorio',$url);
-			$url = "storage/app/public/documentoComprobatorio/".$url;
+			$upload = Storage::disk('google')->put($url, file_get_contents($request['documento']));
+			$url = Storage::disk('google')->url($url);
 			if (!$upload)
 				return redirect()
 							->back()
@@ -48,6 +49,7 @@ class Controller extends BaseController
 				'message' => 'O documento comprobatorio é necessário.'
 			]);
 		}
+		
 	}
 	public function cadastroFinal(Request $request){
 		$usuario = auth()->user();
@@ -72,13 +74,14 @@ class Controller extends BaseController
 		$usuario = auth()->user();
 		$id = $usuario['id'];
 		$nomeUsuario = $usuario['nome'];
+		$tipo = $usuario['tipo'];
 		$url = null;
 		if($request->hasFile('image') && $request->file('image')->isValid()){
 			$nome = uniqid(date('HisYmd'));
 			$extensao = $request->image->extension();
 			$url = "{$nome}.{$extensao}";
-			$upload = $request->image->storeAs('perfil',$url);
-			$url = "storage/app/public/perfil/{$id}-{$nome}-".$url;
+			$upload = Storage::disk('google')->put($url, file_get_contents($request['image']));
+			$url = Storage::disk('google')->url($url);
 			if (!$upload)
 				return redirect()
 							->back()
@@ -87,24 +90,23 @@ class Controller extends BaseController
 		}
 		if($url != null){
 			$info_usuario = ['nome' => $request['nome'],
-						'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-						'genero' => $request['genero'],
+						'genero' => intval($request['genero']),
 						'email' => $request['email'],
-						'password' => HASH::make($request['password']), 
-						'tipo' => $request['tipo'],
+						'password' => HASH::make($request['password']),
 						'url_foto' => $url
 						];
 		}else{
 			$info_usuario = ['nome' => $request['nome'],
-						'nascimento' => date('Y-m-d', strtotime(str_replace('-', '/', $request['nascimento']))),
-						'genero' => $request['genero'],
+						'genero' => intval($request['genero']),
 						'email' => $request['email'],
 						'password' => HASH::make($request['password']), 
-						'tipo' => $request['tipo'],
 						'url_foto' => ""
 						];
 		}
-		return $this->usuario->setPerfil($id,$info_usuario);
+		if($tipo==2){
+			$info_usuario+=['modeloCarro' => $request['modeloCarro'],'corCarro'=>$request['corCarro'], 'placaCarro' => $request['placaCarro']];
+		}
+		return $this->usuario->setPerfil($id,$tipo,$info_usuario);
 	}
 	public function mudarTipoPerfil(Request $request){
 		$usuario = auth()->user();
@@ -139,5 +141,11 @@ class Controller extends BaseController
 		$id = $usuario['id'];
 		$denuncia = ['id_denunciado' => $request['id_denunciado'],'tipo' => $request['tipo'],'comentario'=> $request['comentario']];
 		return $this->usuario->setDenuncia($id,$denuncia);
+	}
+	public function buscarPorNome(Request $request){
+		$usuario = auth()->user();
+		$id = $usuario['id'];
+		$nome = $request['nome'];
+		return $this->usuario->setBuscaPorNome($id,$nome);
 	}
 }

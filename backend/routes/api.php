@@ -26,7 +26,7 @@ Route::get('/',function(){
 Route::post('/preCadastro', 'Controller@preCadastro');
 Route::post('/', 'AuthController@login');
 
-Route::group(['middleware' => 'jwt.auth'], function () {
+Route::group(['middleware' => ['jwt.auth']], function () {
 	
 	Route::post('/cadastroFinalUsuario', 'Controller@cadastroFinal');
     Route::get('/indexUsuario', 'Controller@verPerfil');
@@ -34,8 +34,11 @@ Route::group(['middleware' => 'jwt.auth'], function () {
 	Route::post('/checarCadastroUsuario', 'Controller@checarCadastro');
 	Route::get('/checarTipoUsuario', 'Controller@checarTipo');
 	Route::post('/mudarTipoPerfilUsuario', 'Controller@mudarTipoPerfil');
+	Route::post('/denunciarUsuario', 'Controller@denunciar');
+	Route::post('/buscarNomeUsuario','Controller@buscarPorNome');
 	
 	Route::post('/criarCorridaMotorista','MotoristaController@criarCorrida');
+	Route::post('/inserirInfosMotorista','MotoristaController@inserirInfos');
 	Route::get('/corridaAtualMotorista','MotoristaController@corridaAtual');
 	Route::get('/historicoMotorista','MotoristaController@historico');
 	Route::get('/cancelarCorridaMotorista','MotoristaController@cancelarCorrida');
